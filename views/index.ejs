@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Results!</title>
+  </head>
+  <body>
+    <h2>Check out this message board!</h2>
+    <hr />
+    <% if(typeof(errors) != 'undefined' ) { %>
+        <% for (var x in errors) { %>
+         <h3><%= errors[x].message %></h3>
+        <% } %>
+    <% } %>
+
+    <form action="/message" method="post">
+      Name: <input type="text" name="name" />
+      <p>Message:</p>
+  		<textarea rows="5" cols="50" name="message"></textarea>
+  		<input type="submit" name="submit" value="Post message">
+    </form>
+
+    <% if(messages.length > 0) { %>
+        <% for (var x in messages) { %>
+          <p>
+          &quot;<%= messages[x].message %>&quot;
+          </p>
+         <p>- <%= messages[x].name %> at <%= messages[x].createdAt %></p>
+
+         <div style="margin-left: 20px;">
+
+           <% if(messages[x].comments.length > 0) { %>
+             <% for (var i = 0; i < messages[x].comments.length; i++) { %>
+               <p>
+                 &quot;<%= messages[x].comments[i].comment %>&quot;
+               </p>
+               <p>- <%= messages[x].comments[i].name %></p>
+               <% } %>
+               <% } %>
+
+               <form action="/comment" method="post">
+                 Name: <input type="text" name="name" />
+                 <p>Comment:</p>
+                 <textarea rows="5" cols="50" name="comment"></textarea>
+                 <input type="hidden" name="messageId" value="<%= messages[x]._id %>">
+                 <input type="submit" name="submit" value="Post comment">
+               </form>
+         </div>
+
+         <hr />
+        <% } %>
+    <% } %>
+  </body>
+</html>
